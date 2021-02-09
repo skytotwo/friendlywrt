@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mbedtls
-PKG_VERSION:=2.12.0
+PKG_VERSION:=2.16.8
 PKG_RELEASE:=1
 PKG_USE_MIPS16:=0
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-gpl.tgz
-PKG_SOURCE_URL:=https://tls.mbed.org/download/
-PKG_HASH:=8661d19a896a5a7a232ed01ac7f05cf0ec3514798f18076c2c9ef965fbeb5a28
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=https://codeload.github.com/ARMmbed/mbedtls/tar.gz/v$(PKG_VERSION)?
+PKG_HASH:=fe9e3b15c3375943bdfebbbb20dd6b4f1147b3b5d926248bd835d73247407430
 
 PKG_BUILD_PARALLEL:=1
 PKG_LICENSE:=GPL-2.0+
@@ -64,9 +64,9 @@ endef
 PKG_INSTALL:=1
 
 TARGET_CFLAGS += -ffunction-sections -fdata-sections
+TARGET_CFLAGS := $(filter-out -O%,$(TARGET_CFLAGS))
 
 CMAKE_OPTIONS += \
-	-DCMAKE_BUILD_TYPE:String="Release" \
 	-DUSE_SHARED_MBEDTLS_LIBRARY:Bool=ON \
 	-DENABLE_TESTING:Bool=OFF \
 	-DENABLE_PROGRAMS:Bool=ON

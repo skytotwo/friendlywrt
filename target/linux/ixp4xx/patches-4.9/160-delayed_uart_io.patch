@@ -1,6 +1,6 @@
 --- a/drivers/tty/serial/8250/8250_core.c
 +++ b/drivers/tty/serial/8250/8250_core.c
-@@ -833,6 +833,7 @@ static int serial8250_probe(struct platf
+@@ -832,6 +832,7 @@ static int serial8250_probe(struct platf
  		uart.port.get_mctrl	= p->get_mctrl;
  		uart.port.pm		= p->pm;
  		uart.port.dev		= &dev->dev;
@@ -8,7 +8,7 @@
  		uart.port.irqflags	|= irqflag;
  		ret = serial8250_register_8250_port(&uart);
  		if (ret < 0) {
-@@ -989,6 +990,7 @@ int serial8250_register_8250_port(struct
+@@ -988,6 +989,7 @@ int serial8250_register_8250_port(struct
  		uart->bugs		= up->bugs;
  		uart->port.mapbase      = up->port.mapbase;
  		uart->port.mapsize      = up->port.mapsize;
@@ -18,7 +18,7 @@
  		uart->capabilities	= up->capabilities;
 --- a/drivers/tty/serial/serial_core.c
 +++ b/drivers/tty/serial/serial_core.c
-@@ -2233,6 +2233,7 @@ uart_report_port(struct uart_driver *drv
+@@ -2259,6 +2259,7 @@ uart_report_port(struct uart_driver *drv
  		snprintf(address, sizeof(address),
  			 "I/O 0x%lx offset 0x%x", port->iobase, port->hub6);
  		break;
@@ -26,7 +26,7 @@
  	case UPIO_MEM:
  	case UPIO_MEM16:
  	case UPIO_MEM32:
-@@ -2897,6 +2898,7 @@ int uart_match_port(struct uart_port *po
+@@ -2932,6 +2933,7 @@ int uart_match_port(struct uart_port *po
  	case UPIO_HUB6:
  		return (port1->iobase == port2->iobase) &&
  		       (port1->hub6   == port2->hub6);
@@ -54,7 +54,7 @@
  
  	unsigned int		read_status_mask;	/* driver specific */
  	unsigned int		ignore_status_mask;	/* driver specific */
-@@ -233,6 +234,7 @@ struct uart_port {
+@@ -234,6 +235,7 @@ struct uart_port {
  	int			hw_stopped;		/* sw-assisted CTS flow state */
  	unsigned int		mctrl;			/* current modem ctrl settings */
  	unsigned int		timeout;		/* character-based timeout */
@@ -64,7 +64,7 @@
  	unsigned int		custom_divisor;
 --- a/drivers/tty/serial/8250/8250_port.c
 +++ b/drivers/tty/serial/8250/8250_port.c
-@@ -384,6 +384,20 @@ static unsigned int mem16_serial_in(stru
+@@ -383,6 +383,20 @@ static unsigned int mem16_serial_in(stru
  	return readw(p->membase + offset);
  }
  
@@ -85,7 +85,7 @@
  static void mem32_serial_out(struct uart_port *p, int offset, int value)
  {
  	offset = offset << p->regshift;
-@@ -456,6 +470,11 @@ static void set_io_from_upio(struct uart
+@@ -455,6 +469,11 @@ static void set_io_from_upio(struct uart
  		p->serial_out = mem32be_serial_out;
  		break;
  
@@ -97,7 +97,7 @@
  #ifdef CONFIG_SERIAL_8250_RT288X
  	case UPIO_AU:
  		p->serial_in = au_serial_in;
-@@ -483,6 +502,7 @@ serial_port_out_sync(struct uart_port *p
+@@ -482,6 +501,7 @@ serial_port_out_sync(struct uart_port *p
  	case UPIO_MEM16:
  	case UPIO_MEM32:
  	case UPIO_MEM32BE:
@@ -105,7 +105,7 @@
  	case UPIO_AU:
  		p->serial_out(p, offset, value);
  		p->serial_in(p, UART_LCR);	/* safe, no side-effects */
-@@ -2760,6 +2780,7 @@ static int serial8250_request_std_resour
+@@ -2780,6 +2800,7 @@ static int serial8250_request_std_resour
  	case UPIO_MEM32BE:
  	case UPIO_MEM16:
  	case UPIO_MEM:
@@ -113,7 +113,7 @@
  		if (!port->mapbase)
  			break;
  
-@@ -2798,6 +2819,7 @@ static void serial8250_release_std_resou
+@@ -2818,6 +2839,7 @@ static void serial8250_release_std_resou
  	case UPIO_MEM32BE:
  	case UPIO_MEM16:
  	case UPIO_MEM:

@@ -83,7 +83,7 @@ $(BIN_DIR)/$(SDK_NAME).tar.xz: clean
 	mkdir -p $(SDK_BUILD_DIR)/dl $(SDK_BUILD_DIR)/package
 	$(CP) -L $(INCLUDE_DIR) $(SCRIPT_DIR) $(SDK_BUILD_DIR)/
 	$(TAR) -cf - -C $(TOPDIR) \
-		`cd $(TOPDIR); find $(KDIR_BASE) -name \*.ko` \
+		`cd $(TOPDIR); find $(KDIR_BASE)/ -name \*.ko` \
 		`cd $(TOPDIR); find $(KDIR_BASE)/firmware/ -newer $(KDIR_BASE)/firmware/Makefile \
 			-type f -name '*.bin' -or -name '*.cis' -or -name '*.csp' -or -name '*.dsp' -or -name '*.fw'` \
 		$(foreach exclude,$(EXCLUDE_DIRS),--exclude="$(exclude)") \
@@ -135,7 +135,8 @@ $(BIN_DIR)/$(SDK_NAME).tar.xz: clean
 	-rm -rf \
 		$(SDK_BUILD_DIR)/$(STAGING_SUBDIR_HOST)/ccache \
 		$(SDK_BUILD_DIR)/$(STAGING_SUBDIR_TARGET)/ccache \
-		$(SDK_BUILD_DIR)/$(STAGING_SUBDIR_TOOLCHAIN)/ccache
+		$(SDK_BUILD_DIR)/$(STAGING_SUBDIR_TOOLCHAIN)/ccache \
+		$(SDK_BUILD_DIR)/$(STAGING_SUBDIR_HOST)/.prereq-build
 
 	-rm -f $(SDK_BUILD_DIR)/feeds.conf.default
 	$(if $(BASE_FEED),echo "$(BASE_FEED)" > $(SDK_BUILD_DIR)/feeds.conf.default)
